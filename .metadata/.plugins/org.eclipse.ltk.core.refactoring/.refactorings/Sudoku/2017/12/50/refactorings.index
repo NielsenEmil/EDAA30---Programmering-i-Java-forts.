@@ -1,0 +1,13 @@
+1513174683491	Delete element
+1513174902680	Rename field 'sudokuMap'
+1513190508202	Delete element
+1513241194093	Rename local variable 'i'
+1513241203118	Rename local variable 'j'
+1513244000047	Rename local variable 'alphBtn'
+1513244017138	Rename local variable 'freqBtn'
+1513252692655	Rename resource 'style.css'
+1513262358580	Rename local variable 'cur'
+1513276607741	Delete element
+1513279960490	Rename local variable 'cur'
+1513287189088	Rename local variable 'cell'
+1513287211647	Rename local variable 'value'

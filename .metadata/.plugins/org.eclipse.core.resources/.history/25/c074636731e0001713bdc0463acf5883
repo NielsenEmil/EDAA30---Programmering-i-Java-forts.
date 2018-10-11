@@ -1,0 +1,146 @@
+
+public class Sudoku {
+	
+	public int[][] sudokuMatrix;
+	
+	
+	
+	public Sudoku(int[][] input){
+		sudokuMatrix = new int[9][9];
+		for (int i = 0; i < 9; i++) {
+			for (int j = 0; j < 9; j++) {
+				sudokuMatrix[i][j] = input[i][j];
+			}
+		}
+	}
+	
+	
+	private boolean solve(int i, int j){	
+		
+		// if the cell is null, we have reached the end
+		  if (cur == null)
+		   return true;
+
+		  // if grid[cur] already has a value, there is nothing to solve here,
+		  // continue on to next cell
+		  if (getValue(i, j) != 0) {
+		   // return whatever is being returned by solve(next)
+		   // i.e the state of soduku's solution is not being determined by
+		   // this cell, but by other cells
+			  if (i < 8)
+				  i++;
+			  else{
+				  i = 0;
+				  j++;
+			  }  
+			  return solve(i, j);
+		  }
+
+		  // this is where each possible value is being assigned to the cell, and
+		  // checked if a solutions could be arrived at.
+		  
+		  // if grid[cur] doesn't have a value
+		  // try each possible value
+		  for (int a = 1; a <= 9; a++) {
+		   // check if valid, if valid, then update
+		   boolean valid = isValid(a, i, j);
+
+		   if (!valid) // i not valid for this cell, try other values
+		    continue;
+
+		   // assign here
+		   grid[cur.row][cur.col] = i;
+
+		   // continue with next cell
+		   boolean solved = solve(getNextCell(cur));
+		   // if solved, return, else try other values
+		   if (solved)
+		    return true;
+		   else
+		    grid[cur.row][cur.col] = 0; // reset
+		   // continue with other possible values
+		  }
+
+		  // if you reach here, then no value from 1 - 9 for this cell can solve
+		  // return false
+		  return false;
+		 }
+		
+		
+		if (getValue(i, j) == 0){
+			for (int k = 0; k < 9; k++) {
+				if(isValid(k, i, j)){
+					setValue(k, i, j);
+					if (i < 9){
+						i++;
+					}
+					else {
+						i = 0;
+						j++;
+					}
+				}
+				else
+					return false;
+			}
+		}
+		solve(i, j);
+		return true;
+	}
+	
+	public boolean isValid(int value, int row, int col){
+		if (getValue(row, col) != 0){
+			return false;
+		}
+		
+		//Checks if value exists in row
+		for (int c = 0; c < 9; c++) {
+			   if (getValue(row, c) == value){
+				   return false;
+			   }  
+		}
+		
+		//Checks if value exists in column
+		for (int r = 0; r < 9; r++) {
+			   if (getValue(r, col) == value){
+				   return false;
+			   }  
+		}
+		
+		
+		//Checks if value exists in region
+		int x1 = 3 * (row / 3);
+		int y1 = 3 * (col / 3);
+		int x2 = x1 + 2;
+		int y2 = y1 + 2;
+		
+		for (int x = x1; x <= x2; x++){
+			for (int y = y1; y <= y2; y++){
+				if (getValue(x, y) == value){
+					return false;
+				}
+			}
+		}
+		
+		return true;
+	}
+	
+	public void setValue(int i, int j, int value){
+		sudokuMatrix[i][j] = value;
+	}
+	
+	public int getValue(int i, int j){
+		return sudokuMatrix[i][j];
+	}
+	
+	public static void main(String[] args) {
+		int[][] input = new int[9][9];
+		for (int i = 0; i < 9; i++) {
+			for (int j = 0; j < 9; j++) {
+				input[i][j] = i;
+			}
+		}
+		Sudoku sudoku = new Sudoku(input);
+		sudoku.solve(0,0);
+	}
+
+}

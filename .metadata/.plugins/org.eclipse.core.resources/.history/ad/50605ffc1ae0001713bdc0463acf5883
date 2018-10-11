@@ -1,0 +1,55 @@
+
+public class Sudoku {
+	
+	public int[][] sudokuMatrix;
+	
+	
+	
+	public Sudoku(int[][] input){
+		sudokuMatrix = new int[9][9];
+		for (int i = 0; i < 9; i++) {
+			for (int j = 0; j < 9; j++) {
+				sudokuMatrix[i][j] = input[i][j];
+			}
+		}
+	}
+	
+	
+	private boolean solve(int i, int j){
+		for (int a = 0; a < 9; a++) {
+			for (int b = 0; b < sudokuMatrix.length; b++) {
+				solve(a, b);
+			}	
+		}
+		
+		
+		
+//		for (int[] a : sudokuMatrix) {
+//			for (int b : a){
+//				System.out.print(b);
+//			}
+//			System.out.println();
+//		}
+		return false;
+	}
+	
+	public void setValue(int i, int j, int value){
+		sudokuMatrix[i][j] = value;
+	}
+	
+	public int getValue(int i, int j){
+		return sudokuMatrix[i][j];
+	}
+	
+	public static void main(String[] args) {
+		int[][] input = new int[9][9];
+		for (int i = 0; i < 9; i++) {
+			for (int j = 0; j < 9; j++) {
+				input[i][j] = i;
+			}
+		}
+		Sudoku sudoku = new Sudoku(input);
+		sudoku.solve(0,0);
+	}
+
+}

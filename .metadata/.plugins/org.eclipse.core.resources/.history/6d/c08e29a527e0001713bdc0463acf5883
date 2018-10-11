@@ -1,0 +1,89 @@
+
+public class Sudoku {
+	
+	public int[][] sudokuMatrix;
+	
+	
+	
+	public Sudoku(int[][] input){
+		sudokuMatrix = new int[9][9];
+		for (int i = 0; i < 9; i++) {
+			for (int j = 0; j < 9; j++) {
+				sudokuMatrix[i][j] = input[i][j];
+			}
+		}
+	}
+	
+	
+	private boolean solve(int i, int j){
+		
+		if (getValue(i, j) == 0){
+			for (int k = 0; k < 9; k++) {
+				if(isValid(k, i, j)){
+					setValue(k, i, j);
+					if (i < 9){
+						i++;
+					}
+					else {
+						i = 0;
+						j++;
+					}
+				}
+				else
+					return false;
+			}
+		}
+		solve(i, j);
+		return true;
+	}
+	
+	public boolean isValid(int value, int row, int col){
+		if (getValue(row, col) != 0){
+			return false;
+		}
+		
+		for (int c = 0; c < 9; c++) {
+			   if (getValue(row, c) == value){
+				   return false;
+			   }  
+		}
+		
+		for (int r = 0; r < 9; r++) {
+			   if (getValue(r, col) == value){
+				   return false;
+			   }  
+		}
+		
+		int x1 = 3 * (row / 3);
+		int y1 = 3 * (col / 3);
+		int x2 = x1 + 2;
+		int y2 = y1 + 2;
+
+		for (int x = x1; x <= x2; x++)
+			for (int y = y1; y <= y2; y++)
+				if (getValue(x, y) == value)
+					return false;
+		
+		return true;
+	}
+	
+	public void setValue(int i, int j, int value){
+		sudokuMatrix[i][j] = value;
+	}
+	
+	public int getValue(int i, int j){
+		return sudokuMatrix[i][j];
+	}
+	
+	public static void main(String[] args) {
+		int[][] input = new int[9][9];
+		for (int i = 0; i < 9; i++) {
+			for (int j = 0; j < 9; j++) {
+				input[i][j] = i;
+			}
+		}
+		Sudoku sudoku = new Sudoku(input);
+		sudoku.solve(0,0);
+	}
+
+}

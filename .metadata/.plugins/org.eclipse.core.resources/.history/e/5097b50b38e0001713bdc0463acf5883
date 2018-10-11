@@ -1,0 +1,135 @@
+
+public class Sudoku {
+
+	public int[][] sudokuMatrix;
+
+	public Sudoku(int[][] input) {
+		sudokuMatrix = new int[9][9];
+		for (int i = 0; i < 9; i++) {
+			for (int j = 0; j < 9; j++) {
+				setValue(input[i][j], i, j);
+			}
+		}
+	}
+
+	private boolean solve(int i, int j) {
+
+		// if the cell is null, we have reached the end
+		if ((Integer) getValue(i, j) == null)
+			return true;
+
+		// if grid[cur] already has a value, there is nothing to solve here,
+		// continue on to next cell
+		if (getValue(i, j) != 0) {
+			// return whatever is being returned by solve(next)
+			// i.e the state of soduku's solution is not being determined by
+			// this cell, but by other cells
+			if (i < 8)
+				i++;
+			else if (j < 8) {
+				i = 0;
+				j++;
+			}
+			return solve(i, j);
+		}
+
+		// this is where each possible value is being assigned to the cell, and
+		// checked if a solutions could be arrived at.
+
+		// if grid[cur] doesn't have a value
+		// try each possible value
+		for (int a = 1; a <= 9; a++) {
+			// check if valid, if valid, then update
+			boolean valid = isValid(a, i, j);
+
+			if (valid) {
+				// assign here
+				setValue(a, i, j);
+
+				// continue with next cell
+				if (i < 8)
+					i++;
+				else if (j < 8) {
+					i = 0;
+					j++;
+				}
+				boolean solved = solve(i, j);
+				// if solved, return, else try other values
+				if (solved)
+					return true;
+				else
+					setValue(0, i, j); // reset
+				// continue with other possible values
+			}
+		}
+
+		// if you reach here, then no value from 1 - 9 for this cell can solve
+		// return false
+		return false;
+	}
+
+	public boolean isValid(int value, int row, int col) {
+		if (getValue(row, col) != 0) {
+			return false;
+		}
+
+		// Checks if value exists in row
+		for (int c = 0; c < 9; c++) {
+			if (getValue(row, c) == value) {
+				return false;
+			}
+		}
+
+		// Checks if value exists in column
+		for (int r = 0; r < 9; r++) {
+			if (getValue(r, col) == value) {
+				return false;
+			}
+		}
+
+		// Checks if value exists in region
+		int x1 = 3 * (row / 3);
+		int y1 = 3 * (col / 3);
+		int x2 = x1 + 2;
+		int y2 = y1 + 2;
+
+		for (int x = x1; x <= x2; x++) {
+			for (int y = y1; y <= y2; y++) {
+				if (getValue(x, y) == value) {
+					return false;
+				}
+			}
+		}
+
+		return true;
+	}
+
+	public void setValue(int i, int j, int value) {
+		sudokuMatrix[i][j] = value;
+	}
+
+	public int getValue(int i, int j) {
+		return sudokuMatrix[i][j];
+	}
+	
+	static void printGrid(int grid[][]) {
+		  for (int row = 0; row < 9; row++) {
+		   for (int col = 0; col < 9; col++)
+		    System.out.print(grid[row][col]);
+		   System.out.println();
+		  }
+		 }
+
+	public static void main(String[] args) {
+		int[][] input = new int[9][9];
+		for (int i = 0; i < 9; i++) {
+			for (int j = 0; j < 9; j++) {
+				input[i][j] = 0;
+			}
+		}
+		Sudoku sudoku = new Sudoku(input);
+		sudoku.solve(0, 0);
+		printGrid(sudoku);
+	}
+
+}
